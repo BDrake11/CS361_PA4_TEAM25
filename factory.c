@@ -144,6 +144,8 @@ int main(int argc, char *argv[])
     if (N > MAXFACTORIES)
         N = MAXFACTORIES;
 
+    printf("\nI will attempt to accept orders at port %d and use %d sub-factories.\n", port, N);
+
     /* ------------------------ Set up UDP socket ------------------------- */
     sd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sd < 0)
@@ -176,7 +178,7 @@ int main(int argc, char *argv[])
         alen = sizeof(clntSkt);
         memset(&msg1, 0, sizeof(msg1));
 
-        printf("\nFACTORY server waiting for Order Requests\n\n");
+        printf("\nFACTORY server ( by AIDEN SMITH, BRADEN DRAKE ) waiting for Order Requests\n\n");
 
         /* ---------------------- Receive REQUEST_MSG -------------------- */
         if (recvfrom(sd, &msg1, sizeof(msg1), 0,
@@ -184,7 +186,7 @@ int main(int argc, char *argv[])
             err_sys("Error during recvfrom()");
         }
 
-        printf("FACTORY server received: ");
+        printf("FACTORY server ( by AIDEN SMITH, BRADEN DRAKE ) received: ");
         printMsg(&msg1);
         puts("");
         inet_ntop(AF_INET, (void *) &clntSkt.sin_addr.s_addr,
@@ -202,7 +204,7 @@ int main(int argc, char *argv[])
         msg1.numFac  = htonl(N);
         sendto(sd, &msg1, sizeof(msg1), 0, (SA *) &clntSkt, alen);
 
-        printf("\n\nFACTORY sent this Order Confirmation to the client ");
+        printf("\n\nFACTORY ( by AIDEN SMITH, BRADEN DRAKE ) sent this Order Confirmation to the client ");
         printMsg(&msg1);
         puts("");
 
@@ -221,7 +223,7 @@ int main(int argc, char *argv[])
             finfo[i].partsMade = 0;
             finfo[i].iterations = 0;
 
-            printf("Created Factory Thread # %d with capacity = %3d parts"
+            printf("Created Factory Thread # %2d with capacity = %3d parts"
                    " & duration = %4d mSec\n",
                    i, finfo[i].capacity, finfo[i].duration);
 
@@ -243,20 +245,20 @@ int main(int argc, char *argv[])
         int grandTotal = 0;
 
         printf("\n****** FACTORY Server ( by Aiden Smith and Braden Drake ) Summary Report ******\n");
-        printf("Sub-Factory   Parts Made   Iterations\n");
+        printf("    Sub-Factory      Parts Made      Iterations\n");
 
         for (int i = 1; i <= N; i++) {
             grandTotal += finfo[i].partsMade;
-            printf("%6d %13d %11d\n",
+            printf("           %4d        %8d            %4d\n",
                    finfo[i].factoryID,
                    finfo[i].partsMade,
                    finfo[i].iterations);
         }
 
-        printf("=========================================\n");
-        printf("Grand total parts made = %5d   vs  order size of %5d\n",
+        printf("====================================================\n");
+        printf("Grand total parts made   = %5d   vs  order size of %5d\n",
                grandTotal, orderSize);
-        printf("Order-to-Completion time = %.1f milliSeconds\n\n",
+        printf("\nOrder-to-Completion time = %.1f milliSeconds\n\n",
                elapsed_ms);
     }
 
@@ -316,7 +318,7 @@ void *subFactory(void *arg)
         sendto(sd, &msg, sizeof(msg), 0,
                (SA *) &clntSkt, sizeof(clntSkt));
 
-        printf("Factory # %2d: Going to make %5d parts in %4d mSec\n",
+        printf("Factory ( by AIDEN SMITH, BRADEN DRAKE )  # %2d: Going to make %5d parts in %4d mSec\n",
                info->factoryID, toMake, info->duration);
         fflush(stdout);
     }

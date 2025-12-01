@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
                  (SA *) &srvrSkt, &alen) < 0)
         err_sys("Error during recvfrom()");
 
-    printf("PROCUREMENT received this from the FACTORY server: ");
+    printf("PROCUREMENT ( by AIDEN SMITH, BRADEN DRAKE ) received this from the FACTORY server: ");
     printMsg(&msg2);
     puts("\n");
 
@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
             int parts    = (int) ntohl(incomingMessage.partsMade);
             int duration = (int) ntohl(incomingMessage.duration);
 
-            printf("PROCUREMENT: Factory #%-2d  produced %-5d parts"
+            printf("PROCUREMENT  ( by AIDEN SMITH, BRADEN DRAKE ): Factory #%-2d  produced %-5d parts"
                    " in %-4d milliSecs\n",
                    facID, parts, duration);
 
@@ -133,12 +133,12 @@ int main(int argc, char *argv[])
             partsMade[facID] += parts;
         }
         else if (purpose == COMPLETION_MSG) {
-            printf("PROCUREMENT: Factory #%-2d        COMPLETED its task\n\n",
+            printf("PROCUREMENT  ( by AIDEN SMITH, BRADEN DRAKE ): Factory #%-2d       COMPLETED its task\n",
                    facID);
             activeFactories--;
         }
         else if (purpose == PROTOCOL_ERR) {
-            printf("PROCUREMENT: Received invalid msg ");
+            printf("PROCUREMENT ( by AIDEN SMITH, BRADEN DRAKE ): Received invalid msg ");
             printMsg(&incomingMessage);
             puts("\n");
 
@@ -159,22 +159,22 @@ int main(int argc, char *argv[])
 
     /* ---------------------- Print summary report ----------------------- */
     totalItems = 0;
-    printf("\n****** PROCUREMENT (by Aiden Smith and Braden Drake ) Summary Report ******\n");
-    printf("Sub-Factory   Parts Made   Iterations\n");
+    printf("\n\n****** PROCUREMENT  ( by AIDEN SMITH, BRADEN DRAKE ) Summary Report ******\n");
+    printf("    Sub-Factory      Parts Made      Iterations\n");
 
     for (int i = 1; i <= numFactories; i++) {
         totalItems += partsMade[i];
-        printf("%6d %13d %11d\n",
+        printf("           %4d        %8d            %4d\n",
                i, partsMade[i], iters[i]);
     }
 
-    printf("=========================================\n");
-    printf("Grand total parts made = %5d   vs  order size of %5d\n",
+    printf("===================================================\n");
+    printf("Grand total parts made   = %5d   vs  order size of %5d\n",
            totalItems, orderSize);
-    printf("Order-to-Completion time = %.1f milliSeconds\n",
+    printf("\nOrder-to-Completion time = %.1f milliSeconds\n",
            elapsed_ms);
 
-    printf("\n>>> PROCURMENT Terminated\n");
+    printf("\n>>> PROCUREMENT  ( by AIDEN SMITH, BRADEN DRAKE ) Terminated\n");
 
     if (close(sd) < 0) {
         perror("Error closing socket.");
